@@ -135,10 +135,6 @@ Properties.prototype.trigger = function(srcEvent, type) {
   return $(this.handlerElem).triggerHandler(event, this);
 }
 
-/**
- * Returns the distance that the element has traveled.
- * @return {number} The total distance traveled.
- */
 Properties.prototype.distance = function() {
   return Math.pow(Math.pow(this.deltaX, 2) + Math.pow(this.deltaY, 2), 0.5);
 }
@@ -151,10 +147,6 @@ function Element(event, handler, origHandler) {
   this.properties = new Properties(event, handler, origHandler);
 }
 
-/**
- * Fires a dragstart event, properly handling its return value.
- * @return {Event} event The underlying mouse event.
- */
 Element.prototype.dragstart = function(event) {
   var ret = this.properties.trigger(event, "dragstart");
   if (ret === false)
@@ -163,26 +155,14 @@ Element.prototype.dragstart = function(event) {
   return true;
 }
 
-/**
- * Fires a drag event, properly handling its return value.
- * @return {Event} event The underlying mouse event.
- */
 Element.prototype.drag = function(event) {
   return this.properties.trigger(event, "drag") === false ? this.abort(event) : true;
 }
 
-/**
- * Fires a dragend event, properly handling its return value.
- * @return {Event} event The underlying mouse event.
- */
 Element.prototype.dragend = function(event) {
   this.properties.trigger(event, "dragend");
 }
 
-/**
- * Should be called whenever a handler's return value indicates that the rest
- * of the interaction should be cancelled.
- */
 Element.prototype.abort = function() {
   this.dragend();
   return false;
@@ -219,9 +199,6 @@ function Drag(event, handler) {
   this.enableTextSelect(false);
 }
 
-/**
- * Should be called whenever the drag event is ending.
- */
 Drag.prototype.finish = function() {
   $(document).off(".drag");
 
@@ -230,20 +207,12 @@ Drag.prototype.finish = function() {
     this.detachEvent("ondragstart", dontStart);
 }
 
-/**
- * Contains browser-specific logic for enabling or disabling text selection,
- * so it can be disabled for the duration of the drag.
- */
 Drag.prototype.enableTextSelect = function(enable) {
   $(document)[enable ? "unbind" : "bind"]("selectstart", dontStart)
     .attr("unselectable", enable ? "off" : "on")
     .css("MozUserSelect", enable ? "" : "none");
 }
 
-/**
- * The drag event's "mousemove" handler.
- * @param {Event} event The mousemove event.
- */
 Drag.prototype.mouseMove = function(event) {
   this.properties.update(event);
   if (!this.dragging && this.properties.distance(event) >= this.opts.distance) {
@@ -256,10 +225,6 @@ Drag.prototype.mouseMove = function(event) {
     this.finish();
 }
 
-/**
- * The drag event's "mouseup" handler.
- * @param {Event} event The mouseup event.
- */
 Drag.prototype.mouseUp = function(event) {
   $.each(this.interactions, function(i, ia) { ia.dragend(event); });
   this.enableTextSelect(true);
