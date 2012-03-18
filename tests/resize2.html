@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="../jdrag.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+jQuery(function($){
+	$('.drag')
+		.click(function(){
+			$( this ).toggleClass("selected");
+		})
+		.drag("init",function(){
+			if ( $( this ).is('.selected') )
+				return $('.selected');					  
+		})
+		.drag("start",function( ev, dd ){
+			dd.attr = $( ev.target ).attr("class");
+			dd.width = $( this ).width();
+			dd.height = $( this ).height();
+		})
+		.drag(function( ev, dd ){
+			var props = {};
+			if ( dd.attr.indexOf("E") > -1 ){
+				props.width = Math.max( 32, dd.width + dd.deltaX );
+			}
+			if ( dd.attr.indexOf("S") > -1 ){
+				props.height = Math.max( 32, dd.height + dd.deltaY );
+			}
+			if ( dd.attr.indexOf("W") > -1 ){
+				props.width = Math.max( 32, dd.width - dd.deltaX );
+				props.left = dd.originalX + dd.width - props.width;
+			}
+			if ( dd.attr.indexOf("N") > -1 ){
+				props.height = Math.max( 32, dd.height - dd.deltaY );
+				props.top = dd.originalY + dd.height - props.height;
+			}
+			if ( dd.attr.indexOf("drag") > -1 ){
+				props.top = dd.offsetY;
+				props.left = dd.offsetX;
+			}
+			$( this ).css( props );
+		});
+});
+</script>
+
+<h1>Resize2 Drag Demo</h1>
+<p>Drag each box, or the edge handles to resize, click to manipulate multiple.</p>
+<div class="drag" style="left:20px;">
+	<div class="handle NE"></div>
+	<div class="handle NN"></div>
+	<div class="handle NW"></div>
+	<div class="handle WW"></div>
+	<div class="handle EE"></div>
+	<div class="handle SW"></div>
+	<div class="handle SS"></div>
+	<div class="handle SE"></div>
+</div>
+<div class="drag" style="left:100px;">
+	<div class="handle NE"></div>
+	<div class="handle NN"></div>
+	<div class="handle NW"></div>
+	<div class="handle WW"></div>
+	<div class="handle EE"></div>
+	<div class="handle SW"></div>
+	<div class="handle SS"></div>
+	<div class="handle SE"></div>
+</div>
+<div class="drag" style="left:180px;">
+	<div class="handle NE"></div>
+	<div class="handle NN"></div>
+	<div class="handle NW"></div>
+	<div class="handle WW"></div>
+	<div class="handle EE"></div>
+	<div class="handle SW"></div>
+	<div class="handle SS"></div>
+	<div class="handle SE"></div>
+</div>
+
+<style type="text/css">
+.drag {
+	position: absolute;
+	border: 1px solid #89B;
+	background: #BCE;
+	height: 58px;
+	width: 58px;
+	top: 120px;
+	cursor: move;
+	}
+.handle {
+	position: absolute;
+	height: 6px;
+	width: 6px;
+	border: 1px solid #89B;
+	background: #9AC; 
+	}
+.NW, .NN, .NE {
+	top: -4px;
+	}
+.NE, .EE, .SE {
+	right: -4px;
+	}
+.SW, .SS, .SE {
+	bottom: -4px;
+	}
+.NW, .WW, .SW {
+	left: -4px;
+	}
+.SE, .NW {	
+	cursor: nw-resize;
+	}
+.SW, .NE {
+	cursor: ne-resize;
+	}
+.NN, .SS {
+	cursor: n-resize;
+	left: 50%;
+	margin-left: -4px;
+	}
+.EE, .WW {
+	cursor: e-resize;
+	top: 50%;
+	margin-top: -4px;
+	}	
+.selected {
+	background-color: #ECB;
+	border-color: #B98;
+	}
+.selected .handle {  
+	background-color: #CA9;
+	border-color: #B98;
+	}	
+</style></body>
+</html>

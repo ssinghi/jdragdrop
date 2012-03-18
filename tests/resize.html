@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="../jdrag.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+jQuery(function($){
+	$('.drag')
+		.drag("start",function( ev, dd ){
+			dd.width = $( this ).width();
+			dd.height = $( this ).height();
+		})
+		.drag(function( ev, dd ){
+			$( this ).css({
+				width: Math.max( 20, dd.width + dd.deltaX ),
+				height: Math.max( 20, dd.height + dd.deltaY )
+			});
+		},{ handle:'.handle' });
+});
+</script>
+
+<h1>Resize Drag Demo</h1>
+<p>Drag the lower right corners to resize each box.</p>
+<div class="drag" style="left:20px;">
+	<div class="handle"></div>
+</div>
+<div class="drag" style="left:100px;">
+	<div class="handle"></div>
+</div>
+<div class="drag" style="left:180px;">
+	<div class="handle"></div>
+</div>
+
+<style type="text/css">
+.drag {
+	position: absolute;
+	border: 1px solid #89B;
+	background: #BCE;
+	height: 58px;
+	width: 58px;
+	top: 120px;
+	}
+.handle {
+	position: absolute;
+	bottom: -1px;
+	right: -1px;
+	cursor: nw-resize;
+	height: 8px;
+	width: 8px;
+	border: 1px solid #89B;
+	background: #9AC; 
+	}		
+</style></body>
+</html>

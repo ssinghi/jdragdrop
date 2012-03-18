@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="../jdrag.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+jQuery(function($){
+	$('.drag').drag(function( ev, dd ){
+		$( this ).css({
+			top: dd.offsetY,
+			left: dd.offsetX
+		});
+	},{ handle:".handle" });		   
+});
+</script>
+
+<h1>Handle Drag Demo</h1>
+<p>Drag the boxes around the page by the top "handles".</p>
+<div class="drag" style="left:20px;">
+	<div class="handle">HANDLE</div>	
+</div>
+<div class="drag" style="left:100px;">
+	<div class="handle">HANDLE</div>
+</div>
+<div class="drag" style="left:180px;">
+	<div class="handle">HANDLE</div>
+</div>
+
+<style type="text/css">
+.drag {
+	position: absolute;
+	border: 1px solid #89B;
+	background: #BCE;
+	height: 58px;
+	width: 58px;
+	top: 120px;
+	}
+.handle {
+	background: #9AC;
+	border-bottom: 1px solid #89B;
+	cursor: move;
+	font-size: 10px;
+	line-height: 10px;
+	padding: 2px 0;
+	text-align: center;
+	color: #222;
+	}	
+</style></body>
+</html>

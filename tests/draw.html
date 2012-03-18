@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="../jdrag.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+jQuery(function($){
+	var canvas = $('#draw')[0].getContext('2d');
+	canvas.strokeStyle = "#137";
+	canvas.lineCap = 'round';
+	canvas.lineWidth = 4;
+	canvas.beginPath();
+	$('#draw')
+		.drag("start",function( ev, dd ){
+			canvas.moveTo( 
+				ev.pageX - dd.originalX,
+				ev.pageY - dd.originalY
+			);
+		})
+		.drag(function( ev, dd ){	
+			canvas.lineTo(
+				ev.pageX - dd.originalX,
+				ev.pageY - dd.originalY
+			);
+			canvas.clearRect(0,0,680,300);
+			canvas.stroke(); 
+		});
+});
+</script>
+
+<h1>Draw Drag Demo</h1>
+<p>Click and drag inside the box to draw a line.</p>
+<canvas id="draw" width="680" height="300"></canvas>  
+
+<style type="text/css">
+#draw {
+	border: 1px solid #AAA;
+	background: #EEE;
+	}
+</style></body>
+</html>

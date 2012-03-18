@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="../jdrag.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+jQuery(function($){
+	$('.drag')
+		.drag(function( ev, dd ){
+			$( this ).css({
+				top: dd.offsetY,
+				left: dd.offsetX
+			});
+		},{ relative:true });
+});
+</script>
+
+<h1>Relative Drag Demo</h1>
+<p>Drag the boxes around the screen, which are not positioned relative to the document.</p>
+<div id="container">
+	<div class="drag" style="left:20px;"></div>
+	<div class="drag" style="left:100px;"></div>
+	<div class="drag" style="left:180px;"></div>
+</div>
+<style type="text/css">
+.drag {
+	position: absolute;
+	border: 1px solid #89B;
+	background: #BCE;
+	height: 58px;
+	width: 58px;
+	cursor: move;
+	top: 20px;
+	}
+#container {
+	position: relative;
+	height: 299px;
+	border: 1px dashed #888;
+	}
+</style></body>
+</html>

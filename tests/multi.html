@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="../jdrag.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+jQuery(function($){
+	$('.drag')
+		.click(function(){
+			$( this ).toggleClass("selected");
+		})
+		.drag("init",function(){
+			if ( $( this ).is('.selected') )
+				return $('.selected');
+		})
+		.drag(function( ev, dd ){
+			$( this ).css({
+				top: dd.offsetY,
+				left: dd.offsetX
+			});
+		});
+});
+</script>
+
+<h1>Multi Drag Demo</h1>
+<p>Click to select multiple boxes, and drag them around the screen.</p>
+<div class="drag" style="left:20px;"></div>
+<div class="drag" style="left:100px;"></div>
+<div class="drag" style="left:180px;"></div>
+
+<style type="text/css">
+.drag {
+	position: absolute;
+	border: 1px solid #89B;
+	background: #BCE;
+	height: 58px;
+	width: 58px;
+	cursor: move;
+	top: 120px;
+	}
+.selected {
+	background-color: #ECB;
+	border-color: #B98;
+	}
+</style></body>
+</html>

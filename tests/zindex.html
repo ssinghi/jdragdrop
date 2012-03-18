@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="../jdrag.js"></script>
+<title>ThreeDubMedia &middot; jquery.event.drag</title>
+</head>
+<body>
+<script type="text/javascript">
+jQuery(function($){
+	$('.drag')
+		.drag("start",function(){
+			$( this ).appendTo( this.parentNode );
+		})
+		.drag(function( ev, dd ){
+			$( this ).css({
+				top: dd.offsetY,
+				left: dd.offsetX
+			});
+		});
+});
+</script>
+
+<h1>Z-index Drag Demo</h1>
+<p>Drag the boxes around the page, the dragged box always appears on top.</p>
+<div class="drag" style="left:20px;"></div>
+<div class="drag" style="left:100px;"></div>
+<div class="drag" style="left:180px;"></div>
+
+<style type="text/css">
+.drag {
+	position: absolute;
+	border: 1px solid #89B;
+	background: #BCE;
+	height: 58px;
+	width: 58px;
+	top: 120px;
+	cursor: move;
+	}
+</style></body>
+</html>
