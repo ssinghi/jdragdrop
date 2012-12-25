@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="../jdrag.js"></script>
+<script src="../jdrop.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+jQuery(function($){
+   $('.drag').each(function( i ){
+      $( this )
+         .drag("start",function( ev, dd ){
+            $( dd.available ).addClass("available");
+         })
+         .drag("end",function( ev, dd ){
+            $( dd.available ).removeClass("available");
+         })      
+         .drag(function( ev, dd ){
+            $( this ).css({
+               top: dd.offsetY,
+               left: dd.offsetX
+            });
+         }, { drop:':contains('+ $( this ).text() +')' });
+
+   });
+   $('.drop td')
+      .drop("start",function(){
+         $( this ).addClass("active");
+      })
+      .drop(function( ev, dd ){
+         $( this ).toggleClass("dropped");
+      })
+      .drop("end",function(){
+         $( this ).removeClass("active");
+      });   
+});
+</script>
+
+<h1>Affordance Drop Demo</h1>
+<p>Drag the blue boxes, they may only be dropped into the matching dashed boxes.</p>
+<table class="drop" cellspacing="10">
+   <tr><td>A</td><td>B</td><td>C</td></tr>
+   <tr><td>B</td><td>C</td><td>A</td></tr>
+   <tr><td>C</td><td>A</td><td>B</td></tr>
+</table>
+<div class="drag" style="left:20px;">A</div>
+<div class="drag" style="left:100px;">B</div>
+<div class="drag" style="left:180px;">C</div>
+
+<style type="text/css">
+.drag {
+   position: absolute;
+   border: 1px solid #89B;
+   background: #BCE;
+   height: 58px;
+   width: 58px;
+   cursor: move;
+   top: 110px;
+   line-height: 58px;
+   text-align: center;
+   }
+.drop {
+   float: right;
+   table-layout: fixed;
+   }
+.drop td {
+   width: 95px;
+   height: 90px;
+   padding: 0;
+   border: 1px dashed #888;
+   background: #EEE;
+   overflow: hidden;
+   text-align: center;
+   }
+td.dropped {
+   background-color: #EBC;
+   border-color: #B89;
+   }   
+td.available {  
+   background-color: #EEB;
+   border-color: #BB8;
+   }   
+td.active {  
+   background-color: #CEB;
+   border-color: #9B8;
+   }
+</style>
+</body>
+</html>

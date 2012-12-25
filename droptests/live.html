@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+<script src="../jdrag.js"></script>
+<script src="../jdrop.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+jQuery(function($){
+   var num = 1;
+   $('#add').click(function(){
+      $('<div class="drop" />')
+         .text( num++ )
+         .appendTo( document.body )
+         .css({ 
+            top: Math.random() * ( $( window ).height() - 100 ) + 20, 
+            left: Math.random() * ( $( window ).width() - 100 ) + 20
+         });
+   });
+   $( document )
+      .on("dragstart",".drag",function(){
+         $( this ).appendTo( this.parentNode );
+      })
+      .on("drag",".drag",function( ev, dd ){
+         $( this ).css({
+            top: dd.offsetY,
+            left: dd.offsetX
+         });
+      })
+      .on("dropstart",".drop",function(){
+         $( this ).addClass("active");                        
+      })
+      .on("drop",".drop",function(){
+         $( this ).toggleClass("dropped");                        
+      })
+      .on("dropend",".drop",function(){
+         $( this ).removeClass("active");                        
+      });
+});
+</script>
+
+<h1>Live Drop Demo</h1>
+<p>
+   <input type="button" id="add" value="Add a Box" />
+   to the screen, drag the blue boxes into it, thanks to "live" delegation.
+</p>
+<div class="drag" style="left:20px;"></div>
+<div class="drag" style="left:100px;"></div>
+<div class="drag" style="left:180px;"></div>
+
+<style type="text/css">
+.drag {
+   position: absolute;
+   border: 1px solid #89B;
+   background: #BCE;
+   height: 58px;
+   width: 58px;
+   cursor: move;
+   top: 120px;
+   text-align: center;
+   line-height: 58px;
+   }
+.drop {
+   position: absolute;
+   width: 64px;
+   height: 64px;
+   padding: 0;
+   border: 1px dashed #888;
+   background: #EEE;
+   line-height: 64px;
+   text-align: center;
+   overflow: hidden;
+   background: #EEE;
+   }      
+.dropped {
+   background-color: #EBC;
+   border-color: #B89;
+   }      
+.active {
+   background-color: #BEB;
+   border-color: #8A8;
+   }
+</style>
+</body>
+</html>
