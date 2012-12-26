@@ -1,7 +1,6 @@
 /**
  * @fileoverview Drag plugin, modeled after jquery.event.drag.
  * @author jhaberman@gmail.com (Josh Haberman)
- * Borrows heavily from jquery.event.drag (MIT licensed).
  */
 
 (function($) {

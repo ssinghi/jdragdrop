@@ -38,7 +38,10 @@ of jQuery.
 
 This library does not use the jQuery "special events" API.  It uses only
 public jQuery functionality like `$.on()` and `$.trigger()` to register
-and trigger custom drag/drop functionality.
+and trigger custom drag/drop functionality.  However there is one exception:
+this library *does* use the `$(element).data(“events”)` interface which
+was not officially documented and which was removed in jQuery 1.8.  Need
+to investigate the best way to resolve this problem.
 
 Another major difference is that this library registers far fewer event
 handlers on the DOM.  The ThreeDubMedia library registers a set of event
@@ -76,4 +79,4 @@ love to see any contributions of:
 ## Copyright / License
 
 Copyright (c) 2012 Google, Inc.
-Released under Apache 2.0.
+Released under Apache 2.0
