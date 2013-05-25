@@ -97,11 +97,14 @@ function Properties(event, handler, origHandler) {
   this.drag = origHandler.targetElem;
   this.target = handler.targetElem;
   this.handlerElem = handler.handlerElem;
-  this.startX = event.pageX;
-  this.startY = event.pageY;
+  this.startX = evX(event);
+  this.startY = evY(event);
   this.originalX = xy.left;
   this.originalY = xy.top;
 }
+
+function evX(e) { return e.pageX || e.originalEvent.pageX; }
+function evY(e) { return e.pageY || e.originalEvent.pageY; }
 
 /**
  * Updates the properties to reflect a new mouse position.
@@ -109,8 +112,10 @@ function Properties(event, handler, origHandler) {
  * @param {Event} event The event that indicates a new mouse position.
  */
 Properties.prototype.update = function(event) {
-  this.deltaX = event.pageX - this.startX;
-  this.deltaY = event.pageY - this.startY;
+  if (event.originalEvent.type != 'touchend') {
+    this.deltaX = evX(event) - this.startX;
+    this.deltaY = evY(event) - this.startY;
+  }
   this.offsetX = this.originalX + this.deltaX;
   this.offsetY = this.originalY + this.deltaY;
 }
@@ -188,6 +193,8 @@ function Drag(event, handler) {
   });
   $(document).on("mousemove.drag", this, function(e) { e.data.mouseMove(e); });
   $(document).on("mouseup.drag", this, function(e) { e.data.mouseUp(e); });
+  $(document).on("touchmove.drag", this, function(e) { e.data.mouseMove(e); });
+  $(document).on("touchend.drag", this, function(e) { e.data.mouseUp(e); });
 
   // Prevent image dragging in IE.
   if (this.attachEvent)
@@ -275,6 +282,26 @@ special.drag = special.draginit = special.dragstart = special.dragend = {
     $.data(this, handleObj.type, handleObj);
   }
 };
+
+/**
+ * Handler for "touchstart" events that is always registered for the entire
+ * document.
+ */
+$(document).on("touchstart.jdrag", function(event) {
+  // Initialize options with defaults.
+  var opts;
+  var handler = getClosestHandler(event.target);
+  if (!handler) return;
+  opts = handler.opts;
+
+  // Ensure that the event fulfills the draginit criteria.
+  if (opts.not && $(opts.not, handler.target).is(event.target)) return;
+  if (opts.handle && $(event.target).closest(opts.handle, event.currentTarget).length == 0)
+    return;
+
+  new Drag(event, handler);
+  return false;
+});
 
 /**
  * Variants are:
