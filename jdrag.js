@@ -187,7 +187,7 @@ function Drag(event, handler) {
   var ret = this.properties.trigger(event, "draginit")
   if (ret === false) return;  // User cancelled.
 
-  this.interactions = $(ret || [handler.targetElem]).get().map(function(dragElem) {
+  this.interactions = $.map($(ret || [handler.targetElem]).get(), function(dragElem) {
     var elemHandler = getClosestHandler(dragElem);
     return handler ? new Element(event, elemHandler, handler) : null;
   });
