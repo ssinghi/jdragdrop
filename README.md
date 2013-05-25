@@ -22,12 +22,10 @@ JavaScript drag/drop library I have found.  Benefits are:
    as is illustrated in the demos, without having to put the logic
    for complicated interactions in the library itself.
 
-However, when I tried to use the ThreeDubMedia libraries early in
-2012, I found that they didn't work correctly with jQuery 1.7.
-When I tried to fix this problem, I discovered that these libraries
-used a complicated feature of jQuery known as "special events," and
-generally seemed more tightly coupled to jQuery internals than I
-wanted.
+However, when I tried to use the ThreeDubMedia libraries early in 2012, I found
+that they didn't work correctly with jQuery 1.7.  When I tried to fix this
+problem, I had a hard time following the code, and it generally seemed more
+tightly coupled to jQuery internals than I wanted.
 
 I decided to try creating a different implementation of ThreeDubMedia's
 API that used only public jQuery functionality, in hopes that the
@@ -36,12 +34,11 @@ of jQuery.
 
 ## Differences
 
-This library does not use the jQuery "special events" API.  It uses only
-public jQuery functionality like `$.on()` and `$.trigger()` to register
-and trigger custom drag/drop functionality.  However there is one exception:
-this library *does* use the `$(element).data(“events”)` interface which
-was not officially documented and which was removed in jQuery 1.8.  Need
-to investigate the best way to resolve this problem.
+This library does not access any jQuery internals.  In particular it does
+not wrap/replace jQuery's `$.event.dispatch` function.  It also does not
+patch and reuse existing events; it constructs its own events and copies
+the relevant fields from the underlying event.  This should lead to greater
+encapsulation and predictability.
 
 Another major difference is that this library registers far fewer event
 handlers on the DOM.  The ThreeDubMedia library registers a set of event
@@ -57,11 +54,13 @@ of the drag/drop interaction.
 
 ## Status
 
-Currently the "drag" part of the library supports all the demos in Chrome
-(with one exception, see below).  Drop is not yet implemented.
+Currently the "drag" part of the library supports all the demos in Chrome.
+The one exception is that the "click" property is broken; the normal click
+event cannot be suppressed.  I can't figure out how to do that without
+breaking encapsulation in jQuery; see:
+[this forum post](http://forum.jquery.com/topic/requesting-a-way-to-prepend-an-event-handler).
 
-`dragtests/live.html` can lose the drag if you move the mouse too fast;
-this should be fixed.
+Drop is not yet implemented.
 
 I don't have too much time to devote to maintaining the library, but I'd
 love to see any contributions of:

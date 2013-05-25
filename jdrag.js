@@ -27,10 +27,8 @@ function dontStart() { return false; }
 var props = ["target", "pageX", "pageY", "which", "metaKey"];
 
 /**
- * Gets a handler of the given type.  This is our one bit of slight jQuery
- * encapsulation violation (I don't believe that data("events") is *officially*
- * documented, though John Resig mentions it in this jQuery slide deck:
- * http://ejohn.org/apps/workshop/adv-talk/
+ * Gets a handler of the given type by looking for any data we stored when our
+ * special event was registered.
  * @param {HTMLElement} targetElem The logical element we are getting a handler
  *     for.
  * @param {HTMLElement} handlerElem The physical element we are getting a
@@ -40,9 +38,8 @@ var props = ["target", "pageX", "pageY", "which", "metaKey"];
  * @param {string} type The event type to look for.
  */
 function getHandler(targetElem, handlerElem, type) {
-  var events = $.data(handlerElem, "events") || {}
-  if (!events[type]) return;
-  var ev = events[type][0];
+  var ev = $.data(handlerElem, type);
+  if (!ev) return;
   var elem = ev.selector ?
       $(targetElem).closest(ev.selector || "", handlerElem).get()[0] : handlerElem;
   if (!elem) return;
@@ -217,6 +214,14 @@ Drag.prototype.mouseMove = function(event) {
   if (!this.dragging && this.properties.distance(event) >= this.opts.distance) {
     filter(this.interactions, function(ia) { return ia.dragstart(event); });
     this.dragging = true;
+    if (this.opts.click == false) {
+      // When the mouse comes back up, it will fire a click event.  The user
+      // has asked us to prevent this.
+      //
+      // XXX: Unfortunately we can't prepend this to the list of handlers, so
+      // this is ineffective at the moment.
+      //$(this.properties.target).one("click", function(event) {
+    }
   }
   if (this.dragging)
     filter(this.interactions, function(ia) { return ia.drag(event); });
@@ -227,16 +232,6 @@ Drag.prototype.mouseMove = function(event) {
 Drag.prototype.mouseUp = function(event) {
   $.each(this.interactions, function(i, ia) { ia.dragend(event); });
   this.enableTextSelect(true);
-  if (this.dragging && this.opts.click == false) {
-    $(this.properties.target).one("click", function(event) {
-      event.stopImmediatePropagation();
-      event.preventDefault();
-    });
-    // The handler was just appended to the list, but we need it to run first
-    // so it can prevent any other handlers from running.
-    var events = $.data(this.properties.target, "events")["click"];
-    events.splice(0, 0, events.pop());
-  }
   this.finish();
 }
 
@@ -259,6 +254,27 @@ $(document).on("mousedown.jdrag", function(event) {
 
   new Drag(event, handler);
 });
+
+$(document).on("click.jdrag", "*", function(event) {
+  console.log("YO");
+  event.stopImmediatePropagation();
+  event.preventDefault();
+  return false;
+});
+
+/**
+ * Our special event hooks -- these do nothing but save the registered object
+ * into the element's data so we can find it later when "mousedown" happens.
+ */
+var special = $.event.special;
+special.drag = special.draginit = special.dragstart = special.dragend = {
+  add: function(handleObj) {
+    $.data(this, handleObj.type, handleObj);
+  },
+  remove: function(handleObj) {
+    $.data(this, handleObj.type, handleObj);
+  }
+};
 
 /**
  * Variants are:
