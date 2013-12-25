@@ -294,7 +294,7 @@ $(document).on("touchstart.jdrag", function(event) {
   // Initialize options with defaults.
   var opts;
   var handler = getClosestHandler(event.target);
-  if (!handler) return;
+  if (!handler || (event.originalEvent && event.originalEvent.touches && event.originalEvent.touches.length > 1)) return;
   opts = handler.opts;
 
   // Ensure that the event fulfills the draginit criteria.
