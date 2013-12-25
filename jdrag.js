@@ -262,13 +262,6 @@ $(document).on("mousedown.jdrag", function(event) {
   new Drag(event, handler);
 });
 
-$(document).on("click.jdrag", "*", function(event) {
-  console.log("YO");
-  event.stopImmediatePropagation();
-  event.preventDefault();
-  return false;
-});
-
 /**
  * Our special event hooks -- these do nothing but save the registered object
  * into the element's data so we can find it later when "mousedown" happens.
