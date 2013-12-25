@@ -178,7 +178,7 @@ Element.prototype.abort = function() {
  *     indicates what element's handlers should be used for draginit.
  * @constructor.
  */
-function Drag(event, handler) {
+function Drag(event, handler, touch) {
   this.properties = new Properties(event, handler, handler);
   this.opts = handler.opts;
 
@@ -191,10 +191,13 @@ function Drag(event, handler) {
     var elemHandler = getClosestHandler(dragElem);
     return handler ? new Element(event, elemHandler, handler) : null;
   });
-  $(document).on("mousemove.drag", this, function(e) { e.data.mouseMove(e); });
-  $(document).on("mouseup.drag", this, function(e) { e.data.mouseUp(e); });
-  $(document).on("touchmove.drag", this, function(e) { e.data.mouseMove(e); });
-  $(document).on("touchend.drag", this, function(e) { e.data.mouseUp(e); });
+  if(touch) {
+    $(document).on("touchmove.drag", this, function(e) { e.data.mouseMove(e); });
+    $(document).on("touchend.drag", this, function(e) { e.data.mouseUp(e); });
+  } else {
+    $(document).on("mousemove.drag", this, function(e) { e.data.mouseMove(e); });
+    $(document).on("mouseup.drag", this, function(e) { e.data.mouseUp(e); });    
+  }
 
   // Prevent image dragging in IE.
   if (this.attachEvent)
@@ -299,7 +302,7 @@ $(document).on("touchstart.jdrag", function(event) {
   if (opts.handle && $(event.target).closest(opts.handle, event.currentTarget).length == 0)
     return;
 
-  new Drag(event, handler);
+  new Drag(event, handler, true);
   return false;
 });
 
